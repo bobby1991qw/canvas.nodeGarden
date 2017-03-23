@@ -56,4 +56,3 @@ plugin for generate a canvas nodeGarden banner
 
 ##Demo
 <p data-height="265" data-theme-id="0" data-slug-hash="Rpyxrw" data-default-tab="result" data-user="bobby1991qw" data-embed-version="2" data-pen-title="Rpyxrw" class="codepen">See the Pen <a href="http://codepen.io/bobby1991qw/pen/Rpyxrw/">Rpyxrw</a> by qiuwei (<a href="http://codepen.io/bobby1991qw">@bobby1991qw</a>) on <a href="http://codepen.io">CodePen</a>.</p>
-<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
