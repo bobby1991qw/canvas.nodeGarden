@@ -5,7 +5,7 @@ var sassloader = 'style-loader!css-loader!sass-loader?sourceMap=true';
 module.exports = {
     entry: './src/NodeGarden.js',
     output: {
-        filename: 'NodeGarden.bundle.js',
+        filename: 'NodeGarden.js',
         path: path.resolve(__dirname, 'build'),
         publicPath: '/build/'
     },
@@ -21,7 +21,7 @@ module.exports = {
     devServer: {
         port: 3000
     },
-    // plugins: [
-    //     new webpack.optimize.UglifyJsPlugin()
-    // ]
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin()
+    ]
 }

@@ -182,11 +182,12 @@ class NodeGarden {
             nodeCount: 30,
             nodeColor: '#fff',
             opacity: 0.6,
-            bgColor: ['#6cbb6c', '#8fb0ff', '#ff8f8f'],
+            bgColor: '#8fb0ff',
             bgSpeed: 2,
             nodeRadius: () => (Math.random() * 8 + 7),
             lineLength: 350,
-            speed: () => (Math.random() * 1 - 0.5),
+            speedX: () => (Math.random() * 1 - 0.5),
+            speedY: () => (Math.random() * 1 - 0.5),
             mouseNode: true
         };
 
@@ -208,9 +209,13 @@ class NodeGarden {
         this.data.ctx = dom.getContext('2d');
         this.data.options = { ...this.defaultOptions, ...options };
 
-        const { speed, nodeRadius } = this.data.options;
-        if (typeof speed === 'number') {
-            this.data.options.speed = () => (speed);
+        const { speedX, speedY, nodeRadius } = this.data.options;
+        if (typeof speedX === 'number') {
+            this.data.options.speedX = () => (speedX);
+        }
+
+        if (typeof speedY === 'number') {
+            this.data.options.speedY = () => (speedY);
         }
 
         if (typeof nodeRadius === 'number') {
@@ -242,7 +247,7 @@ class NodeGarden {
 
     start() {
         const { options, ctx, canvas, mousePosition } = this.data;
-        const { nodeCount, nodeColor, nodeRadius, lineLength, speed, opacity, mouseNode } = options;
+        const { nodeCount, nodeColor, nodeRadius, lineLength, speedX, speedY, opacity, mouseNode } = options;
         const easing = 0.05;
         const nodeList = [];
 
@@ -253,8 +258,8 @@ class NodeGarden {
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 opacity,
-                speedX: speed(),
-                speedY: speed()
+                speedX: speedX(),
+                speedY: speedY()
             }))
         }
 
