@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>node garden</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            font-size: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas">不支持</canvas>
+    <script src="./build/NodeGarden.bundle.js"></script>
+    <script>
+        var t = new NodeGarden();
+        t.init(document.getElementById('canvas'), {
+            // mouseNode: false
+        });
+    </script>
+</body>
+
+</html>
