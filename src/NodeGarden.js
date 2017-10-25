@@ -179,13 +179,13 @@ class NodeGarden {
         this.defaultOptions = {
             width: '100%',
             height: '100%',
-            nodeCount: 30,
+            nodeCount: 60,
             nodeColor: '#fff',
             opacity: 0.6,
-            bgColor: '#8fb0ff',
+            bgColor: '#9bb3ec',
             bgSpeed: 2,
-            nodeRadius: () => (Math.random() * 8 + 7),
-            lineLength: 350,
+            nodeRadius: () => (Math.random() * 5 + 5),
+            lineLength: 220,
             speedX: () => (Math.random() * 1 - 0.5),
             speedY: () => (Math.random() * 1 - 0.5),
             mouseNode: true
@@ -195,7 +195,6 @@ class NodeGarden {
             canvas: null,
             ctx: null,
             options: null,
-            temp: {},
             mousePosition: {}
         };
     }
@@ -207,7 +206,7 @@ class NodeGarden {
 
         this.data.canvas = dom;
         this.data.ctx = dom.getContext('2d');
-        this.data.options = { ...this.defaultOptions, ...options };
+        this.data.options = Object.assign({}, this.defaultOptions, options);
 
         const { speedX, speedY, nodeRadius } = this.data.options;
         if (typeof speedX === 'number') {
@@ -276,12 +275,10 @@ class NodeGarden {
                 if (hasMouseNode(mouseNode, nodeCount, nodeList.length)) {
                     const mouseNode = nodeList[nodeCount];
                     const dx = mousePosition.x - mouseNode.x;
-                    const dy = mousePosition.y - mouseNode.y;
-                    const dis = Math.sqrt(dx * dx + dy * dy);
-                    const angle = Math.atan2(dy, dx);
+                    const dy = mousePosition.y - mouseNode.y;                    
 
-                    mouseNode.speedX = dis * Math.cos(angle) * easing;
-                    mouseNode.speedY = dis * Math.sin(angle) * easing;
+                    mouseNode.speedX = dx * easing;
+                    mouseNode.speedY = dy * easing;
                 }
 
                 node.move().draw(ctx);

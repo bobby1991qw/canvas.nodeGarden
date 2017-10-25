@@ -1,13 +1,13 @@
 class Circle {
     constructor(ctx, { x = 0, y = 0, color = '#ff0000', speedX = 0, speedY = 0, radius = 5, opacity = 1 }) {
-        this.ctx = ctx;
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.opacity = opacity;
-        this.radius = radius;
-        this.speedX = speedX;
-        this.speedY = speedY;
+        this.ctx = ctx
+        this.x = x
+        this.y = y
+        this.color = color
+        this.opacity = opacity
+        this.radius = radius
+        this.speedX = speedX
+        this.speedY = speedY
     }
 
     draw(ctx = this.ctx) {
@@ -32,24 +32,33 @@ class Circle {
     }
 
     boundaryCheck() {
-        const { canvas } = this.ctx;
-        const radius = this.radius;
-        let boundX, boundY;
+        this._checkBoundary('boundX')
+        this._checkBoundary('boundY')
+    }
+
+    _checkBoundary(type) {
+        let boundary
+        const { canvas } = this.ctx
+        const radius = this.radius
+        const cfg = {
+            boundX: {
+                ballCoordsKey: 'x',
+                canvasKey: 'width',
+                ballSpeedKey: 'speedX'
+            },
+            boundY: {
+                ballCoordsKey: 'y',
+                canvasKey: 'height',
+                ballSpeedKey: 'speedY'
+            }
+        }[type]
 
         if (
-            this.x <= this.radius && (boundX = radius) ||
-            this.x + this.radius >= canvas.width && (boundX = canvas.width - this.radius)
+            this[cfg.ballCoordsKey] <= this.radius && (boundary = radius) ||
+            this[cfg.ballCoordsKey] + this.radius >= canvas[cfg.canvasKey] && (boundary = canvas[cfg.canvasKey] - this.radius)
         ) {
-            this.x = boundX;
-            this.speedX = -this.speedX;
-        }
-
-        if (
-            this.y <= this.radius && (boundY = radius) ||
-            this.y + this.radius >= canvas.height && (boundY = canvas.height - this.radius)
-        ) {
-            this.y = boundY;
-            this.speedY = -this.speedY;
+            this[cfg.ballCoordsKey] = boundary
+            this[cfg.ballSpeedKey] = -this[cfg.ballSpeedKey]
         }
     }
 
@@ -60,7 +69,7 @@ class Circle {
         ctx.lineWidth = 1;
         ctx.translate(0.5, 0.5);
         ctx.strokeStyle = this.color;
-        ctx.globalAlpha = 0.2; // this.opacity;
+        ctx.globalAlpha = this.opacity / 3;
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(circle.x, circle.y);
         ctx.closePath();

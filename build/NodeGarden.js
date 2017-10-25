@@ -1,1 +1,614 @@
-!function(t){function e(i){if(n[i])return n[i].exports;var o=n[i]={i:i,l:!1,exports:{}};return t[i].call(o.exports,o,o.exports,e),o.l=!0,o.exports}var n={};e.m=t,e.c=n,e.i=function(t){return t},e.d=function(t,n,i){e.o(t,n)||Object.defineProperty(t,n,{configurable:!1,enumerable:!0,get:i})},e.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="/build/",e(e.s=2)}([function(t,e,n){"use strict";function i(t){return t&&t.__esModule?t:{default:t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function a(t){return/^\d+(.\d+)?(?:px)?$/.test(t)&&s}function r(t){return/^\d+(.\d+)?%$/.test(t)&&u}function s(t,e){return e}function u(t,e,n){var i=t.parentNode;return parseFloat(getComputedStyle(i)[n])*parseFloat(e)/100}function d(t){return(r(t.height)||a(t.height))&&(r(t.width)||a(t.width))}function h(t,e){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:2,i="canvas-bgColor",o=document.createElement("style"),a=void 0;if(t.className+=i,Array.isArray(e)){var r="@keyframes bgAnimate{",s=e.length,u=100/s;e.push(e[0]);for(var d=0;d<=s;d++)r+=d*u+"%{background:"+e[d]+"}";r+="}",a=r+"."+i+"{animation: bgAnimate "+(s-1)*n+"s infinite forwards}"}else a="."+i+"{background:"+e+"}";o.innerText=a,document.head.appendChild(o)}function c(t,e,n){return t&&e===n-1}function f(t,e,n,i){var o={x:"offsetX",y:"offsetY"}[i],a={x:"width",y:"height"}[i];t[i]===-10&&(n[o]<t.radius?t[i]=t.radius+2:n[o]>e[a]-t.radius?t[i]=e[a]-t.radius-2:t[i]=n[o])}Object.defineProperty(e,"__esModule",{value:!0});var l=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var i in n)Object.prototype.hasOwnProperty.call(n,i)&&(t[i]=n[i])}return t},p=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),v=n(1),y=i(v),g=function(){function t(){o(this,t),this.defaultOptions={width:"100%",height:"100%",nodeCount:30,nodeColor:"#fff",opacity:.6,bgColor:["#6cbb6c","#8fb0ff","#ff8f8f"],bgSpeed:2,nodeRadius:function(){return 8*Math.random()+7},lineLength:350,speed:function(){return 1*Math.random()-.5},mouseNode:!0},this.data={canvas:null,ctx:null,options:null,temp:{},mousePosition:{}}}return p(t,[{key:"init",value:function(t,e){if(!t||1!==t.nodeType||"CANVAS"!==t.tagName)throw new Error("初始化元素必须为canvas");this.data.canvas=t,this.data.ctx=t.getContext("2d"),this.data.options=l({},this.defaultOptions,e);var n=this.data.options,i=n.speed,o=n.nodeRadius;"number"==typeof i&&(this.data.options.speed=function(){return i}),"number"==typeof o&&(this.data.options.nodeRadius=function(){return o}),this.resizeCanvas().setBgGround().start()}},{key:"resizeCanvas",value:function(){var t=this.data,e=t.options,n=t.canvas,i=e.width,o=e.height;if(!d(e))throw new Error("无效的宽高");var s=a(i)||r(i);a(o)||r(o);return n.width=s(n,i,"width"),n.height=s(n,o,"height"),this}},{key:"start",value:function(){for(var t=this.data,e=t.options,n=t.ctx,i=t.canvas,o=t.mousePosition,a=e.nodeCount,r=e.nodeColor,s=e.nodeRadius,u=e.lineLength,d=e.speed,h=e.opacity,f=e.mouseNode,l=.05,p=[],v=0;v<a;v++)p.push(new y.default(n,{radius:s(),color:r,x:Math.random()*i.width,y:Math.random()*i.height,opacity:h,speedX:d(),speedY:d()}));f&&this.addMouseNode(p),function t(){n.clearRect(0,0,i.width,i.height),p.forEach(function(t,e,i){var r=i.slice(e+1);if(c(f,a,p.length)){var s=p[a],d=o.x-s.x,h=o.y-s.y,v=Math.sqrt(d*d+h*h),y=Math.atan2(h,d);s.speedX=v*Math.cos(y)*l,s.speedY=v*Math.sin(y)*l}t.move().draw(n),r.forEach(function(e){var n=t.x-e.x,i=t.y-e.y;Math.sqrt(n*n+i*i)<u&&t.linkTo(e)})}),requestAnimationFrame(t)}()}},{key:"addMouseNode",value:function(t){var e=this.data,n=e.ctx,i=e.options,o=e.canvas,a=e.mousePosition,r=i.nodeColor,s=i.opacity,u=i.nodeCount,d=null,h=new y.default(n,{radius:10,color:r,x:-10,y:-10,opacity:s});o.addEventListener("mouseenter",function(e){f(h,o,e,"x"),f(h,o,e,"y"),clearTimeout(d),h.speedX=h.speedY=0,h.opacity=s,u===t.length&&t.push(h)}),o.addEventListener("mousemove",function(t){a.x=t.offsetX,a.y=t.offsetY}),o.addEventListener("mouseleave",function(){!function e(){d=setTimeout(function(){h.opacity-=.05,h.opacity<=0?(t.length-=1,h.x=-10,h.y=-10):e()},100)}()})}},{key:"setBgGround",value:function(){var t=this.data,e=t.canvas,n=t.options;return h(e,n.bgColor,n.bgSpeed),this}}]),t}();window.NodeGarden=g,e.default=g},function(t,e,n){"use strict";function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),a=function(){function t(e,n){var o=n.x,a=void 0===o?0:o,r=n.y,s=void 0===r?0:r,u=n.color,d=void 0===u?"#ff0000":u,h=n.speedX,c=void 0===h?0:h,f=n.speedY,l=void 0===f?0:f,p=n.radius,v=void 0===p?5:p,y=n.opacity,g=void 0===y?1:y;i(this,t),this.ctx=e,this.x=a,this.y=s,this.color=d,this.opacity=g,this.radius=v,this.speedX=c,this.speedY=l}return o(t,[{key:"draw",value:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.ctx;t.save(),t.fillStyle=this.color,t.lineWidth=0,t.globalAlpha=this.opacity,t.translate(this.x,this.y),t.beginPath(),t.arc(0,0,this.radius,0,2*Math.PI,!1),t.closePath(),t.fill(),t.restore()}},{key:"move",value:function(){return this.boundaryCheck(),this.x+=this.speedX,this.y+=this.speedY,this}},{key:"boundaryCheck",value:function(){var t=this.ctx.canvas,e=this.radius,n=void 0,i=void 0;(this.x<=this.radius&&(n=e)||this.x+this.radius>=t.width&&(n=t.width-this.radius))&&(this.x=n,this.speedX=-this.speedX),(this.y<=this.radius&&(i=e)||this.y+this.radius>=t.height&&(i=t.height-this.radius))&&(this.y=i,this.speedY=-this.speedY)}},{key:"linkTo",value:function(t){var e=this.ctx;e.save(),e.beginPath(),e.lineWidth=1,e.translate(.5,.5),e.strokeStyle=this.color,e.globalAlpha=.2,e.moveTo(this.x,this.y),e.lineTo(t.x,t.y),e.closePath(),e.stroke(),e.restore()}}]),t}();e.default=a},function(t,e,n){n(0),t.exports=n(0)}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/build/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Circle = function () {
+    function Circle(ctx, _ref) {
+        var _ref$x = _ref.x,
+            x = _ref$x === undefined ? 0 : _ref$x,
+            _ref$y = _ref.y,
+            y = _ref$y === undefined ? 0 : _ref$y,
+            _ref$color = _ref.color,
+            color = _ref$color === undefined ? '#ff0000' : _ref$color,
+            _ref$speedX = _ref.speedX,
+            speedX = _ref$speedX === undefined ? 0 : _ref$speedX,
+            _ref$speedY = _ref.speedY,
+            speedY = _ref$speedY === undefined ? 0 : _ref$speedY,
+            _ref$radius = _ref.radius,
+            radius = _ref$radius === undefined ? 5 : _ref$radius,
+            _ref$opacity = _ref.opacity,
+            opacity = _ref$opacity === undefined ? 1 : _ref$opacity;
+
+        _classCallCheck(this, Circle);
+
+        this.ctx = ctx;
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.opacity = opacity;
+        this.radius = radius;
+        this.speedX = speedX;
+        this.speedY = speedY;
+    }
+
+    _createClass(Circle, [{
+        key: 'draw',
+        value: function draw() {
+            var ctx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.ctx;
+
+            ctx.save();
+            ctx.fillStyle = this.color;
+            ctx.lineWidth = 0;
+            ctx.globalAlpha = this.opacity;
+            ctx.translate(this.x, this.y);
+            ctx.beginPath();
+            ctx.arc(0, 0, this.radius, 0, 2 * Math.PI, false);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    }, {
+        key: 'move',
+        value: function move() {
+            this.boundaryCheck();
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            return this;
+        }
+    }, {
+        key: 'boundaryCheck',
+        value: function boundaryCheck() {
+            this._checkBoundary('boundX');
+            this._checkBoundary('boundY');
+        }
+    }, {
+        key: '_checkBoundary',
+        value: function _checkBoundary(type) {
+            var boundary = void 0;
+            var canvas = this.ctx.canvas;
+
+            var radius = this.radius;
+            var cfg = {
+                boundX: {
+                    ballCoordsKey: 'x',
+                    canvasKey: 'width',
+                    ballSpeedKey: 'speedX'
+                },
+                boundY: {
+                    ballCoordsKey: 'y',
+                    canvasKey: 'height',
+                    ballSpeedKey: 'speedY'
+                }
+            }[type];
+
+            if (this[cfg.ballCoordsKey] <= this.radius && (boundary = radius) || this[cfg.ballCoordsKey] + this.radius >= canvas[cfg.canvasKey] && (boundary = canvas[cfg.canvasKey] - this.radius)) {
+                this[cfg.ballCoordsKey] = boundary;
+                this[cfg.ballSpeedKey] = -this[cfg.ballSpeedKey];
+            }
+        }
+    }, {
+        key: 'linkTo',
+        value: function linkTo(circle) {
+            var ctx = this.ctx;
+            ctx.save();
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.translate(0.5, 0.5);
+            ctx.strokeStyle = this.color;
+            ctx.globalAlpha = this.opacity / 3;
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(circle.x, circle.y);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+        }
+    }]);
+
+    return Circle;
+}();
+
+exports.default = Circle;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Circle = __webpack_require__(0);
+
+var _Circle2 = _interopRequireDefault(_Circle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * 验证px或数字宽高
+ * 
+ * @param {any} str 待验证字符串
+ * @returns 失败返回false  成功返回对应的设置方法
+ */
+function validPx(str) {
+    var pxReg = /^\d+(.\d+)?(?:px)?$/;
+
+    return pxReg.test(str) && resizePx;
+}
+
+/**
+ * 验证百分比宽高
+ * 
+ * @param {any} str 待验证字符串
+ * @returns 失败返回false  成功返回对应的设置方法
+ */
+function validPercent(str) {
+    var percentReg = /^\d+(.\d+)?%$/;
+
+    return percentReg.test(str) && resizePercent;
+}
+
+function resizePx(canvas, value) {
+    return value;
+}
+
+/**
+ * 设置百分比宽高
+ * 
+ * @param {any} canvas 需要设置宽高的canvas
+ * @param {any} value 宽高的百分比
+ * @param {any} key 宽度/高度
+ * @returns 数字宽高
+ */
+function resizePercent(canvas, value, key) {
+    var parentNode = canvas.parentNode;
+    var style = parseFloat(getComputedStyle(parentNode)[key]);
+    var percent = parseFloat(value);
+
+    return style * percent / 100;
+}
+
+function validSize(options) {
+    return (validPercent(options.height) || validPx(options.height)) && (validPercent(options.width) || validPx(options.width));
+}
+
+function getPrimaryColor(color) {
+    var rgbColor = void 0;
+    var rgbColorRex = /^rgb\((\d{1,3})\s?,\s?(\d{1,3})\s?,\s?(\d{1,3})\)$/;
+
+    if (color[0] === '#') {
+        // #fff形式
+        color = color.substr(1);
+
+        if (color.length === 3) {
+            color = parseInt('' + color[0].repeat(2) + color[1].repeat(2) + color[2].repeat(2), 16);
+        }
+
+        rgbColor = {
+            r: color >> 16 & 0xff,
+            g: color >> 8 & 0xff,
+            b: color & 0xff
+        };
+    } else if (rgbColorRex.test(color)) {
+        // rgb形式
+        var match = color.match(rgbColorRex);
+
+        rgbColor = {
+            r: parseInt(match[1]),
+            g: parseInt(match[2]),
+            b: parseInt(match[3])
+        };
+    }
+
+    return rgbColor;
+}
+
+function getBgColor(r, g, b) {
+    return '#' + r.toString(16) + g.toString(16) + b.toString(16);
+}
+
+/**
+ * 设置canvas背景
+ * 
+ * @param {any} ele canvas
+ * @param {any} color 色值|色值数组
+ * @param {any} speed 两色值变化的速度
+ */
+function addBgColorStyle(ele, color) {
+    var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+
+    var bgClass = 'canvas-bgColor';
+    var style = document.createElement('style');
+    var css = void 0;
+
+    ele.className += bgClass;
+    if (Array.isArray(color)) {
+        // 变化背景
+        var animation = '@keyframes bgAnimate{';
+        var l = color.length;
+        var unit = 100 / l;
+
+        color.push(color[0]);
+        for (var i = 0; i <= l; i++) {
+            animation += i * unit + '%{background:' + color[i] + '}';
+        }
+
+        animation += '}';
+        css = animation + ('.' + bgClass + '{animation: bgAnimate ' + (l - 1) * speed + 's infinite forwards}');
+    } else {
+        // 单一背景
+        css = '.' + bgClass + '{background:' + color + '}';
+    }
+
+    style.innerText = css;
+    document.head.appendChild(style);
+}
+
+/**
+ * 判断是否存在鼠标节点
+ * 
+ * @param {any} enable 是否允许鼠标节点
+ * @param {any} count 初始化时的数量
+ * @param {any} exceptCount 实际数量
+ * @returns 
+ */
+function hasMouseNode(enable, count, actualCount) {
+    return enable && count === actualCount - 1;
+}
+
+/**
+ * 设置初始化时鼠标节点位置
+ * 
+ * @param {any} node 
+ * @param {any} canvas 
+ * @param {any} e 
+ * @param {any} type 
+ */
+function setMouseNodePosition(node, canvas, e, type) {
+    var defaultPosition = -10;
+    var mousePosition = {
+        x: 'offsetX',
+        y: 'offsetY'
+    }[type];
+    var border = {
+        x: 'width',
+        y: 'height'
+    }[type];
+
+    // 初始位置为-10
+    // 在非初始位置时保持位置
+    // 否者设置位置到距离边界一个radius的位置
+    if (node[type] === defaultPosition) {
+        if (e[mousePosition] < node.radius) {
+            // 偏移2像素，消除临界位置的bug
+            node[type] = node.radius + 2;
+        } else if (e[mousePosition] > canvas[border] - node.radius) {
+            // 同上
+            node[type] = canvas[border] - node.radius - 2;
+        } else {
+            node[type] = e[mousePosition];
+        }
+    }
+}
+
+var NodeGarden = function () {
+    function NodeGarden() {
+        _classCallCheck(this, NodeGarden);
+
+        this.defaultOptions = {
+            width: '100%',
+            height: '100%',
+            nodeCount: 60,
+            nodeColor: '#fff',
+            opacity: 0.6,
+            bgColor: '#9bb3ec',
+            bgSpeed: 2,
+            nodeRadius: function nodeRadius() {
+                return Math.random() * 5 + 5;
+            },
+            lineLength: 220,
+            speedX: function speedX() {
+                return Math.random() * 1 - 0.5;
+            },
+            speedY: function speedY() {
+                return Math.random() * 1 - 0.5;
+            },
+            mouseNode: true
+        };
+
+        this.data = {
+            canvas: null,
+            ctx: null,
+            options: null,
+            mousePosition: {}
+        };
+    }
+
+    _createClass(NodeGarden, [{
+        key: 'init',
+        value: function init(dom, options) {
+            if (!dom || dom.nodeType !== 1 || dom.tagName !== 'CANVAS') {
+                throw new Error('初始化元素必须为canvas');
+            }
+
+            this.data.canvas = dom;
+            this.data.ctx = dom.getContext('2d');
+            this.data.options = Object.assign({}, this.defaultOptions, options);
+
+            var _data$options = this.data.options,
+                speedX = _data$options.speedX,
+                speedY = _data$options.speedY,
+                nodeRadius = _data$options.nodeRadius;
+
+            if (typeof speedX === 'number') {
+                this.data.options.speedX = function () {
+                    return speedX;
+                };
+            }
+
+            if (typeof speedY === 'number') {
+                this.data.options.speedY = function () {
+                    return speedY;
+                };
+            }
+
+            if (typeof nodeRadius === 'number') {
+                this.data.options.nodeRadius = function () {
+                    return nodeRadius;
+                };
+            }
+
+            this.resizeCanvas().setBgGround().start();
+        }
+    }, {
+        key: 'resizeCanvas',
+        value: function resizeCanvas() {
+            var _data = this.data,
+                options = _data.options,
+                canvas = _data.canvas;
+            var width = options.width,
+                height = options.height;
+
+
+            if (!validSize(options)) {
+                throw new Error('无效的宽高');
+            }
+
+            var resizeWidthHandler = validPx(width) || validPercent(width);
+            var resizeHeightHandler = validPx(height) || validPercent(height);
+
+            canvas.width = resizeWidthHandler(canvas, width, 'width');
+            canvas.height = resizeWidthHandler(canvas, height, 'height');
+
+            return this;
+        }
+    }, {
+        key: 'start',
+        value: function start() {
+            var _data2 = this.data,
+                options = _data2.options,
+                ctx = _data2.ctx,
+                canvas = _data2.canvas,
+                mousePosition = _data2.mousePosition;
+            var nodeCount = options.nodeCount,
+                nodeColor = options.nodeColor,
+                nodeRadius = options.nodeRadius,
+                lineLength = options.lineLength,
+                speedX = options.speedX,
+                speedY = options.speedY,
+                opacity = options.opacity,
+                mouseNode = options.mouseNode;
+
+            var easing = 0.05;
+            var nodeList = [];
+
+            for (var i = 0; i < nodeCount; i++) {
+                nodeList.push(new _Circle2.default(ctx, {
+                    radius: nodeRadius(),
+                    color: nodeColor,
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    opacity: opacity,
+                    speedX: speedX(),
+                    speedY: speedY()
+                }));
+            }
+
+            if (mouseNode) {
+                this.addMouseNode(nodeList);
+            }
+
+            (function drawFrame() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                nodeList.forEach(function (node, i, list) {
+                    var otherList = list.slice(i + 1);
+
+                    if (hasMouseNode(mouseNode, nodeCount, nodeList.length)) {
+                        var _mouseNode = nodeList[nodeCount];
+                        var dx = mousePosition.x - _mouseNode.x;
+                        var dy = mousePosition.y - _mouseNode.y;
+
+                        _mouseNode.speedX = dx * easing;
+                        _mouseNode.speedY = dy * easing;
+                    }
+
+                    node.move().draw(ctx);
+                    otherList.forEach(function (otherNode) {
+                        var dx = node.x - otherNode.x;
+                        var dy = node.y - otherNode.y;
+                        var dis = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dis < lineLength) {
+                            node.linkTo(otherNode);
+                        }
+                    });
+                });
+
+                requestAnimationFrame(drawFrame);
+            })();
+        }
+    }, {
+        key: 'addMouseNode',
+        value: function addMouseNode(nodeList) {
+            var _data3 = this.data,
+                ctx = _data3.ctx,
+                options = _data3.options,
+                canvas = _data3.canvas,
+                mousePosition = _data3.mousePosition;
+            var nodeColor = options.nodeColor,
+                opacity = options.opacity,
+                nodeCount = options.nodeCount;
+
+            var removeTimer = null;
+
+            var mouseNode = new _Circle2.default(ctx, {
+                radius: 10,
+                color: nodeColor,
+                x: -10,
+                y: -10,
+                opacity: opacity
+            });
+
+            canvas.addEventListener('mouseenter', function (e) {
+                setMouseNodePosition(mouseNode, canvas, e, 'x');
+                setMouseNodePosition(mouseNode, canvas, e, 'y');
+                clearTimeout(removeTimer);
+                mouseNode.speedX = mouseNode.speedY = 0;
+                mouseNode.opacity = opacity;
+
+                // 不存在鼠标节点才添加
+                nodeCount === nodeList.length && nodeList.push(mouseNode);
+            });
+
+            canvas.addEventListener('mousemove', function (e) {
+                mousePosition.x = e.offsetX;
+                mousePosition.y = e.offsetY;
+            });
+
+            canvas.addEventListener('mouseleave', function () {
+                (function removeNode() {
+                    removeTimer = setTimeout(function () {
+                        mouseNode.opacity -= 0.05;
+                        if (mouseNode.opacity <= 0) {
+                            nodeList.length -= 1;
+                            mouseNode.x = -10;
+                            mouseNode.y = -10;
+                        } else {
+                            removeNode();
+                        }
+                    }, 100);
+                })();
+            });
+        }
+    }, {
+        key: 'setBgGround',
+        value: function setBgGround() {
+            var _data4 = this.data,
+                canvas = _data4.canvas,
+                options = _data4.options;
+            var bgColor = options.bgColor,
+                bgSpeed = options.bgSpeed;
+
+
+            addBgColorStyle(canvas, bgColor, bgSpeed);
+
+            return this;
+        }
+    }]);
+
+    return NodeGarden;
+}();
+
+window.NodeGarden = NodeGarden;
+
+exports.default = NodeGarden;
+
+/***/ })
+/******/ ]);
