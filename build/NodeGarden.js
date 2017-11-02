@@ -385,9 +385,9 @@ var NodeGarden = function () {
             width: '100%',
             height: '100%',
             nodeCount: 60,
-            nodeColor: '#fff',
+            nodeColor: '#aaa',
             opacity: 0.6,
-            bgColor: '#9bb3ec',
+            bgColor: '#f4f6f7',
             bgSpeed: 2,
             nodeRadius: function nodeRadius() {
                 return Math.random() * 5 + 5;
